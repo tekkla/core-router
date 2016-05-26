@@ -1,0 +1,27 @@
+{
+    "name": "tekkla/core-router",
+    "description": "Extension of the lightweight Altorouter. This version adds some methods to retrieve and/or alter data from matches.",
+    "license": "MIT",
+    "type": "library",
+    "keywords": [
+        "router",
+        "lightweight"
+    ],
+    "homepage": "https://github.com/Tekkla/core-router",
+    "require": {
+        "php": ">=7.0.0",
+        "altorouter/altorouter": "v1.2.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "Core\\Router": ""
+        }
+    },
+    "authors": [
+        {
+            "name": "Michael Zorn",
+            "email": "tekkla@tekkla.de",
+            "role": "Developer"
+        }
+    ]
+}
