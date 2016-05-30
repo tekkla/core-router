@@ -188,12 +188,13 @@ class Router extends \AltoRouter implements \ArrayAccess
             $request_method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
         }
 
-        // Framework.js adds automatically an /ajax flag @ the end of the requested URI.
-        // Here we check for this flag, remembers if it's present and then remove the flag
-        // so the following URI matching process runs without flaw.
+        // Is this an ajax request?
         if (substr($request_url, -5) == '/ajax') {
             $this->ajax = true;
             $request_url = str_replace('/ajax', '', $request_url);
+        }
+        elseif(isset($_GET['ajax'])) {
+            $this->ajax = true;
         }
 
         $this->match = parent::match($request_url, $request_method);
