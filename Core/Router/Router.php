@@ -231,6 +231,11 @@ class Router extends \AltoRouter implements \ArrayAccess
         }
 
         foreach ($this->match['params'] as $key => $val) {
+
+            if (empty($val)) {
+                unset($this->match['params'][$key]);
+            }
+
             if (in_array($key, $this->parameter_to_target)) {
                 $this->match['target'][$key] = $val;
             }
