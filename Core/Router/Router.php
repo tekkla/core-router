@@ -46,6 +46,12 @@ class Router extends \AltoRouter implements \ArrayAccess
 
     /**
      *
+     * @var string
+     */
+    private $base_url = '';
+
+    /**
+     *
      * @var Router $instance
      */
     private static $instance;
@@ -62,6 +68,43 @@ class Router extends \AltoRouter implements \ArrayAccess
         }
 
         return self::$instance;
+    }
+
+    /**
+     * Set a base url that gets prepended to generated urls
+     *
+     * @param string $base_url
+     */
+    public function setBaseUrl(string $base_url)
+    {
+        $this->base_url = $base_url;
+    }
+
+    /**
+     * Returns set base url
+     *
+     * @return string
+     */
+    public function getBaseUrl(): string
+    {
+        return $this->baseurl;
+    }
+
+    /**
+     *
+     * {@inheritdoc}
+     *
+     * @see AltoRouter::generate()
+     */
+    public function generate($routeName, array $params = array())
+    {
+        $url = parent::generate($routeName, $params);
+
+        if (!empty($this->base_url)) {
+            $url = $this->base_url . $url;
+        }
+
+        return $url;
     }
 
     /**
@@ -114,28 +157,13 @@ class Router extends \AltoRouter implements \ArrayAccess
     }
 
     /**
-     * Reversed routing for generating the URL for a named route
-     *
-     * @param string $route_name
-     *            The name of the route.
-     * @param array $params
-     *            Associative array of parameters to replace placeholders with.
-     *
-     * @return string The URL of the route with named parameters in place.
-     */
-    public function url($route_name, $params = [])
-    {
-        return $this->generate($route_name, $params);
-    }
-
-    /**
      * Nearly the same as map() method of AltoRouter
      *
      * The only difference is in how app and generic routes are handled.
      * App routes will be put in front of generic routes to prevent that similiar but from app to handle routes are
      * treated as generic routes.
      *
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @see AltoRouter::map()
      */
@@ -175,7 +203,6 @@ class Router extends \AltoRouter implements \ArrayAccess
      */
     public function match($request_url = null, $request_method = null)
     {
-
         // Set Request Url if it isn't passed as parameter
         if ($request_url === null) {
             $request_url = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/';
@@ -193,7 +220,7 @@ class Router extends \AltoRouter implements \ArrayAccess
             $this->ajax = true;
             $request_url = str_replace('/ajax', '', $request_url);
         }
-        elseif(isset($_GET['ajax'])) {
+        elseif (isset($_GET['ajax'])) {
             $this->ajax = true;
         }
 
@@ -230,14 +257,17 @@ class Router extends \AltoRouter implements \ArrayAccess
             }
         }
 
-        foreach ($this->match['params'] as $key => $val) {
+        if (!empty($this->match['params'])) {
 
-            if (empty($val)) {
-                unset($this->match['params'][$key]);
-            }
+            foreach ($this->match['params'] as $key => $val) {
 
-            if (in_array($key, $this->parameter_to_target)) {
-                $this->match['target'][$key] = $val;
+                if (empty($val)) {
+                    unset($this->match['params'][$key]);
+                }
+
+                if (in_array($key, $this->parameter_to_target)) {
+                    $this->match['target'][$key] = $val;
+                }
             }
         }
     }
@@ -325,7 +355,7 @@ class Router extends \AltoRouter implements \ArrayAccess
 
     /**
      *
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @see ArrayAccess::offsetExists()
      */
@@ -336,7 +366,7 @@ class Router extends \AltoRouter implements \ArrayAccess
 
     /**
      *
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @see ArrayAccess::offsetGet()
      */
@@ -349,7 +379,7 @@ class Router extends \AltoRouter implements \ArrayAccess
 
     /**
      *
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @see ArrayAccess::offsetSet()
      */
@@ -360,7 +390,7 @@ class Router extends \AltoRouter implements \ArrayAccess
 
     /**
      *
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @see ArrayAccess::offsetUnset()
      */
