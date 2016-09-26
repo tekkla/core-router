@@ -344,6 +344,21 @@ class Router extends \AltoRouter implements \ArrayAccess
     }
 
     /**
+     * Returns a specific target
+     *
+     * @param string $target
+     *            A target can be 'app', 'controller' or 'action'
+     *
+     * @return string|null
+     */
+    public function getTarget(string $target)
+    {
+        if (!empty($this->match['target'][$target])) {
+            return $this->match['target'][$target];
+        }
+    }
+
+    /**
      * Returns mapped routes stack
      *
      * @return array
