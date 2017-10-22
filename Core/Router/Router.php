@@ -96,7 +96,7 @@ class Router extends \AltoRouter implements \ArrayAccess
      *
      * @see \AltoRouter::generate()
      */
-    public function generate(string $routeName, array $params = [])
+    public function generate($routeName, array $params = array())
     {
         $url = parent::generate($routeName, $params);
         
