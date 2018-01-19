@@ -5,7 +5,7 @@ namespace Core\Router;
  * Router.php
  *
  * @author Michael "Tekkla" Zorn <tekkla@tekkla.de>
- * @copyright 2016
+ * @copyright 2016-2018
  * @license MIT
  */
 class Router extends \AltoRouter implements \ArrayAccess
@@ -281,7 +281,7 @@ class Router extends \AltoRouter implements \ArrayAccess
      */
     public function getCurrentRoute(): string
     {
-        return $this->match['name'];
+        return $this->match['name'] ?? '';
     }
 
     /**
